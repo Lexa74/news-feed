@@ -1,0 +1,22 @@
+.row {
+  display: flex;
+
+  &:nth-child(odd) {
+    background: #fafffa;;
+  }
+
+  &.header {
+    background: green;
+  }
+
+  .cell {
+    flex: 1;
+    padding: 10px;
+    border-bottom: 1px solid #ededed;
+
+    &.header-cell {
+      font-weight: bold;
+      background-color: #d1efd1;
+    }
+  }
+}
