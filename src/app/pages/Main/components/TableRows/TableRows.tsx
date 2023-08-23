@@ -10,16 +10,17 @@ interface ActionsChecked {
     description: boolean
 }
 
-interface TableROwProps {
+interface TableRowProps {
     visibleColumns: ActionsChecked,
     news: INews
 }
 
-export const TableRows = ({visibleColumns, news}: TableROwProps) => {
+export const TableRows = ({visibleColumns, news}: TableRowProps) => {
     const error = useNewsStore((state) => state.error);
     const navigate = useNavigate()
     if(error) {
         navigate('/404')
+        return null
     }
     return (
         <>
