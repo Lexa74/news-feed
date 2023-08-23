@@ -1,33 +1,36 @@
 import create from 'zustand';
-import {INews} from "../services/interfaces/news";
-import {getAllNews} from "../services/newsApi";
+import {IArticles, INews} from "../services/interfaces/news";
+import {getAllNews, getNewsById} from "../services/newsApi";
 
 interface State {
     news: INews;
+    newsById: IArticles[];
     fetchNews: () => Promise<void>;
     filterByDate: (direction: string) => void;
     searchByTitle: (query: string) => void;
+    getNewsById: (nameId: string) => void;
     error: Error | null;
 }
 
-export const useNewsStore = create<State>((set) => ({
+export const useNewsStore = create<State>((set, get) => ({
     news: {
         status: '',
         totalResults: 0,
         articles: [],
     },
+    newsById: [],
     error: null,
-    fetchNews: async (sortBy = '') => {
+    fetchNews: async () => {
         try {
-            const response = await getAllNews(sortBy);
+            const response = await getAllNews();
             set({ news: response });
         } catch (error) {
             set({ error: error as Error })
         }
     },
-    filterByDate: async (direction: string) => {
+    filterByDate: (direction: string) => {
         try {
-            const currentNews: INews = await getAllNews();
+            const currentNews: INews = get().news;
             currentNews.articles.sort((a: { publishedAt: string | number | Date; }, b: { publishedAt: string | number | Date; }) => {
                 let dateA = new Date(a.publishedAt);
                 let dateB = new Date(b.publishedAt);
@@ -43,6 +46,14 @@ export const useNewsStore = create<State>((set) => ({
             const currentNews: INews = await getAllNews();
             const filteredNews = currentNews.articles.filter(article => article.title.includes(query));
             set({news: {...currentNews, articles: filteredNews}});
+        } catch (error) {
+            set({ error: error as Error })
+        }
+    },
+    getNewsById: async (nameId: string) => {
+        try {
+            const currentNews: INews = await getNewsById(nameId);
+            set({newsById: currentNews.articles});
         } catch (error) {
             set({ error: error as Error })
         }

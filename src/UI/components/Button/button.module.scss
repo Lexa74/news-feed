@@ -14,6 +14,14 @@
     background: #d1efd1;
     color: #020202;
     border: 1px solid green;
+
+    &.active {
+      color: white;
+      background: green;
+      &:hover {
+        background: #009300;
+      }
+    }
     &:hover {
       background: #dbf6db;
     }
